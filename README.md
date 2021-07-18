@@ -18,3 +18,11 @@ docker-compose up
 ```bash
 docker exec -it --user root prize-game-app /bin/sh -lc "php artisan migrate"
 ``` 
+
+- Commands
+```bash
+php artisan prize-game:send-money-to-bank --batch=10
+php artisan prize-game:send-subject-to-email --subject=Plane --email=some@email.com
+``` 
+
+

@@ -75,7 +75,7 @@
                                     {{ subjectPrize.title }}
                                 </span>
                                 <button
-                                    v-if="!subjectPrize.refused"
+                                    v-if="!subjectPrize.refused && !subjectPrize.sent"
                                     v-on:click="refuseSubject(subjectPrize.id)"
                                     class="bg-green-500 hover:bg-green-700 text-white py-1 px-2 rounded-full"
                                 >
@@ -86,6 +86,12 @@
                                     class="bg-gray-500 text-white py-1 px-2 rounded-full"
                                 >
                                     Refused
+                                </span>
+                                <span
+                                    v-if="subjectPrize.sent"
+                                    class="bg-gray-500 text-white py-1 px-2 rounded-full"
+                                >
+                                    Sent
                                 </span>
                             </li>
                         </ul>
@@ -149,6 +155,7 @@ const apiRequest = async (route, payload) => {
                 id: Number,
                 title: String,
                 refused: Boolean,
+                sent: Boolean,
                 created_at: String,
                 updated_at: String,
             },
