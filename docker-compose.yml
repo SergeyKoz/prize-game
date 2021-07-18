@@ -1,0 +1,49 @@
+version: '3'
+services:
+    app:
+        build:
+            context: .docker
+            dockerfile: Dockerfile
+        volumes:
+            - .:/var/www
+        container_name: prize-game-app
+        restart: unless-stopped
+        tty: true
+        working_dir: /var/www
+        networks:
+            - prize-game-net
+
+    nginx:
+        image: nginx:alpine
+        container_name: prize-game-nginx
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - .:/var/www
+            - ./.docker/.nginx/:/etc/nginx/conf.d/
+        networks:
+            prize-game-net:
+                aliases:
+                    - prize-game.local
+
+    db:
+        image: mysql:latest
+        container_name: prize-game-db
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: prize-game
+            MYSQL_ROOT_PASSWORD: dev
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        networks:
+            - prize-game-net
+
+networks:
+    prize-game-net:
+        driver: bridge
