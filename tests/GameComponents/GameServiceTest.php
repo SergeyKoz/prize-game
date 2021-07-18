@@ -3,35 +3,44 @@
 namespace Tests\GameComponents;
 
 use App\Models\User;
+use App\Services\BankService;
+use App\Services\BonusService;
 use App\Services\GameService;
-/*use PHPUnit\Framework\TestCase;*/
 use Tests\TestCase;
+
+use App\Services\LimitsService;
 
 class GameServiceTest extends TestCase
 {
     /**
-     * A basic test example.
-     *
-     * @return void
+      * @return void
      */
-    public function test_example()
+    public function test_game()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
 
+        $plays = 5;
+
+        // create accounts and init limits
+        BankService::createAccount($user);
+        BonusService::createAccount($user);
+        LimitsService::setUserLimits($user);
+
         $gameService = new GameService();
 
-        $gameService->play();
-        $gameService->play();
-        $gameService->play();
-        $gameService->play();
-        $gameService->play();
+        for ($i = 0; $i < $plays; $i++) {
+            $gameService->play();
+        }
 
         $history = $gameService->getPrizesHistory();
 
-        echo print_r($history);
+        $prizes = [];
 
-        //print_r($gameService);
-        die();
+        foreach ($history as $items) {
+            $prizes = array_merge($prizes, $items);
+        }
+
+        $this->assertCount($plays, $prizes);
     }
 }

@@ -67,8 +67,7 @@ class SendSubjectToEmailCommand extends Command
             ->where('sent', false)
             ->where('user_id', $user->id)
             ->where('title', $subject)
-            ->get()
-            ->count();
+            ->update(['sent' => 1]);
 
         if ($subjectCount > 0) {
             Mail::to($user)->send(new SubjectMail($subjectCount));
