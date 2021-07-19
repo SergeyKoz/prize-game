@@ -14,9 +14,9 @@ git clone git@github.com:SergeyKoz/prize-game.git
 docker-compose up
 ``` 
 
-- Initialize DB
+- Initialize app
 ```bash
-docker exec -it --user root prize-game-app /bin/sh -lc "php artisan migrate"
+docker exec -it --user www prize-game-app /bin/sh -lc "composer install && cp .env.example .env && php artisan key:generate && php artisan migrate"
 ``` 
 
 - Commands
